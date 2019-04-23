@@ -1,5 +1,6 @@
 "
 1. dfs + checkPalindromic
+2. Similar questions: 647.Palindromic Substrings;   
 "
 
 class Solution {
