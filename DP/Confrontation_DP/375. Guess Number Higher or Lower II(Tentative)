@@ -1,0 +1,32 @@
+"
+Summary:
+TC:O()
+SC:O()
+Similar Problems:
+Follow-Up:
+Comments:
+"
+
+class Solution {
+public:
+    int getMoneyAmount(int n) 
+    {
+        vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+        return helper(1, n, dp);
+    }
+    
+    int helper(int start, int end, vector<vector<int>> &dp)
+    {
+        if(start >= end)
+        {
+            return 0;
+        }
+        if(dp[start][end] != 0) return dp[start][end];
+        int minCost = INT_MAX;
+        for(int i = start; i < end; i++)
+        {
+            minCost = min(minCost, i + max(helper(start, i - 1, dp),helper(i + 1, end, dp)));
+        } 
+        return dp[start][end] = minCost;  
+    }
+};
