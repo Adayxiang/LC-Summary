@@ -6,6 +6,10 @@ Summary:
 TC:O(n2)
 SC:O(n2)->O(n)
 Similar Problems:
+Follow-up:
+1. Maximal Square Follow Up:
+Find one matrix with a diagonal of 1 and all the others of 0;
+length = max(nums[i-length[i-1][j-1]][j],nums[i][j-length[i-1][j-1]]) == 0 ?length[i-1][j-1]) + 1, 0;
 Comments:
 "
 
