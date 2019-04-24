@@ -1,0 +1,46 @@
+"
+Summary: Sub-Questions
+TC:O(n)
+SC:O(1)
+Similar Problems:
+Follow-Up:
+Comments:
+"
+
+class Solution {
+public:
+    /**
+     * @param values: a vector of integers
+     * @return: a boolean which equals to true if the first player will win
+     */
+    bool firstWillWin(vector<int> &values) {
+        // write your code here
+        if(values.size() <= 2) return true;
+        return helper(values, values[0] + values[1], 0, 2, 1) || helper(values, values[0],0, 1, 1);
+    }
+    
+    bool helper(vector<int> &values, int value1, int value2, int pos, int flag)
+    {
+        if(pos >= values.size())
+            return value1 > value2;
+        int valuetmp1 = values[pos];
+        int valuetmp2 = 0;
+        if(pos+1< values.size())
+        {
+            valuetmp2 = valuetmp1 +  values[pos+1];
+        }
+        else
+        {
+            valuetmp2 = valuetmp1;
+        }
+        
+        if(flag == 1)
+        {
+            return helper(values, value1, value2 + valuetmp2, pos + 2, -flag )&&helper(values, value1, value2 + valuetmp1, pos + 1, -flag);
+        }
+        else
+        {
+            return helper(values, value1 + valuetmp2, value2, pos + 2, -flag )||helper(values, value1 + valuetmp1, value2, pos + 1, -flag);
+        }
+    }
+};
