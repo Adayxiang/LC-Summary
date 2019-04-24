@@ -1,7 +1,7 @@
 "
 Summary:
-1. overlap subproblems: 
-2. optimal substructure:
+1. overlap subproblems: everything point is only related to previous three points.
+2. optimal substructure: everything point 
 3. length = min(length[i-1][j],length[i][j-1],length[i-1][j-1]) + 1
 TC:O(n2)
 SC:O(n2)->O(n)
