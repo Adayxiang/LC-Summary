@@ -5,8 +5,20 @@ SC:O(n2)
 Similar Problems:
 Follow-Up:
 Comments:
-New concept: top-bottom and bottom-top method. Commonly used in tree too. If top-bottom, could use map to reduce duplicate search.
+New concept: 
+1.top-bottom and bottom-top method. Commonly used in tree too. If top-bottom, could use map to reduce duplicate search.
 If bottom-up, no need.
+2.
+Optimal Substructure
+The global optimal solution must be valid from maxPath(I, j) and its neighbor
+The starting point maxPath(I ', j') is constructed with a subproblem
+Since the optimal solution path requires monotonicity, the original moment need not be modified
+!!!!!!!!!You don't have to worry about going back to the next position and creating an infinite loop!!!!!!!!!
+
+Overlap Subproblems
+For each maxPath(I, j) starting point, a top-bottom one is required
+Recursively resolves the subproblem of its next valid location, maxPath(I ', j'), and
+And highly covered.
 "
 
 class Solution {
