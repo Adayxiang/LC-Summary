@@ -1,0 +1,101 @@
+"
+Summary:
+TC:O()
+SC:O()
+Similar Problems:
+Follow-Up:
+Comments:
+"
+
+Solution1:DFS
+Runtime: 264 ms, faster than 18.70% of C++ online submissions for Palindrome Partitioning II.
+Memory Usage: 22.8 MB, less than 12.90% of C++ online submissions for Palindrome Partitioning II.
+class Solution {
+public:
+    int minCut(string s) {
+        int n = s.size();
+        if(n == 0) return 0;
+        vector<int> visited(n,-1);
+        vector<vector<int>> Palindrome(n, vector<int>(n,-1));
+        return helper(s,0,n,visited,Palindrome);
+    }
+    
+    int helper(string &s, int start, int end, vector<int> &visited, vector<vector<int>> &Palindrome)
+    {
+        if(start >= end)
+        {
+            return -1;
+        }
+        if(visited[start] != -1)
+            return visited[start];
+        int tmp = INT_MAX;
+        for(int i = start; i < end; ++i)
+        {
+            if(Palindrome[start][i] == -1)
+            {
+                if(isPalindrome(s,start,i, Palindrome))
+                    tmp = min(tmp, helper(s, i + 1, end, visited,Palindrome));
+            }
+            else if(Palindrome[start][i] == 1)
+            {
+                tmp = min(tmp, helper(s, i + 1, end, visited,Palindrome));
+            }
+            
+        }
+        return visited[start] = tmp + 1;
+    }
+    
+    //Time should be wasted in this part. Should think about how to optimize it.
+    bool isPalindrome(string &input, int left, int right,vector<vector<int>> &Palindrome)
+    {
+        if( (input[left] == input[right]) && ( ( right-left < 2 ) || Palindrome[left+1][right-1] ) )
+        {
+            Palindrome[left][right] = 1;
+            return true;
+        }
+        int tmpLeft = left, tmpRight = right;
+        while(left < right)
+        {
+            if(input[left] != input[right])
+            {
+                Palindrome[tmpLeft][tmpRight] = 0;
+                return false;
+            }
+            left++, right--;
+        }
+        Palindrome[tmpLeft][tmpRight] = 1;
+        return true;
+    }
+};
+
+Solution2: DP
+Success
+Details 
+Runtime: 16 ms, faster than 83.01% of C++ online submissions for Palindrome Partitioning II.
+Memory Usage: 10.8 MB, less than 32.26% of C++ online submissions for Palindrome Partitioning II.
+class Solution {
+    public:
+        int minCut(string s) {
+            const int N = s.size();
+            if(N<=1) return 0;
+            int i,j;
+            bool isPalin[N][N];
+            fill_n(&isPalin[0][0], N*N, false);
+            int minCuts[N+1];
+            for(i=0; i<=N; ++i) minCuts[i] = i-1;
+            
+            for(j=1; j<N; ++j)
+            {
+                for(i=j; i>=0; --i)
+                {
+                    if( (s[i] == s[j]) && ( ( j-i < 2 ) || isPalin[i+1][j-1] ) )
+                    {
+                        isPalin[i][j] = true;
+                        minCuts[j+1] = min(minCuts[j+1], 1 + minCuts[i]);    
+                    }
+                }
+            }
+            return minCuts[N];
+            
+        }
+    };
