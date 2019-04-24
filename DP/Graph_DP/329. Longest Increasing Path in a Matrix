@@ -1,0 +1,43 @@
+"
+Summary:It is a dfs problem but it could be seperated as several sub-problems so it could be treated as DP problems too.
+TC:O(n2 * k)
+SC:O(n2)
+Similar Problems:
+Follow-Up:
+Comments:
+New concept: top-bottom and bottom-top method. Commonly used in tree too. If top-bottom, could use map to reduce duplicate search.
+If bottom-up, no need.
+"
+
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.size() == 0 || matrix[0].size() == 0) return 0;
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<int>> visited(m, vector<int>(n,-1));
+        int res = 0;
+        for(int i = 0; i < m; ++i)
+        {
+            for(int j = 0; j < n; ++j)
+            {
+                dfs(matrix, INT_MAX,i,j,visited);
+            }
+        }
+        for(int i = 0; i < m ; ++i)
+        {
+            for(int j = 0; j < n; ++j)
+            {
+                res = max(res, visited[i][j]);
+            }
+        }
+        return res;
+    }
+    
+    int dfs(vector<vector<int>>& matrix, int pre,int i, int j, vector<vector<int>> &visited)
+    {
+        if(i < 0 || i >= matrix.size() || j < 0 || j >= matrix[0].size() || matrix[i][j] >= pre) return 0;
+        if(visited[i][j] != -1) return visited[i][j];
+        visited[i][j] = 1 + max(dfs(matrix, matrix[i][j],i+1,j,visited), max(dfs(matrix, matrix[i][j],i-1,j,visited),max(dfs(matrix, matrix[i][j],i,j+1,visited), dfs(matrix, matrix[i][j],i,j-1,visited))));
+        return visited[i][j];
+    }
+};
