@@ -1,0 +1,79 @@
+"
+Summary:
+TC:O()
+SC:O()
+Similar Problems:
+Follow-Up:
+Comments:
+"
+
+
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @return: An integer indicate the value of maximum difference between two substrings
+     */
+    int maxDiffSubArrays(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        
+        vector<int> leftMax(n, 0);
+        vector<int> leftMin(n, 0);
+        vector<int> rightMax(n, 0);
+        vector<int> rightMin(n, 0);
+        
+        int prefixSum = 0;
+        int localMin = 0;
+        int globalMax = INT_MIN;
+        for(int i = 0; i < n; ++i)
+        {
+            prefixSum +=  nums[i];
+            globalMax = max(globalMax, prefixSum - localMin);
+            localMin = max(localMin, prefixSum);
+            leftMax[i] = globalMax;
+        }
+        
+        prefixSum = 0;
+        int localMax = 0;
+        int globalMin = INT_MAX;
+        for(int i = 0; i  < n; ++i)
+        {
+            prefixSum += nums[i];
+            globalMin = min(globalMin, prefixSum - localMax);
+            localMax = max(localMax, prefixSum);
+            leftMin[i] = globalMin;
+        }
+        
+        prefixSum = 0;
+        localMin = 0;
+        globalMax = INT_MIN;
+        for(int i = n - 1; i >= 0; --i)
+        {
+            prefixSum += nums[i];
+            globalMax  = max(globalMax, prefixSum - localMin);
+            localMin = min(localMin, prefixSum);
+            rightMax[i] = globalMax;
+        }
+        
+        prefixSum = 0;
+        localMax = 0;
+        globalMin = INT_MAX;
+        for(int i = n - 1; i >= 0; --i)
+        {
+            prefixSum += nums[i];
+            globalMin  = max(globalMin, prefixSum - localMax);
+            localMax = min(localMax, prefixSum);
+            rightMin[i] = globalMin;
+        }
+        
+        int res = INT_MIN;
+        for(int i = 0; i < n; ++i)
+        {
+            res = max(res, max(abs(leftMax[i] - rightMin[i
++ 1]),
+abs(leftMin[i] - rightMax[i
++ 1])));
+        }
+    }
+};
