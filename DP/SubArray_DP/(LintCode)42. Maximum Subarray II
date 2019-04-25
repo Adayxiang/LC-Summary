@@ -1,0 +1,96 @@
+"
+Summary:
+TC:O()
+SC:O()
+Similar Problems:
+Follow-Up:
+Comments:
+"
+
+Solution1: PrefixSum
+class Solution {
+public:
+    /*
+     * @param nums: A list of integers
+     * @return: An integer denotes the sum of max two non-overlapping subarrays
+     */
+    int maxTwoSubArrays(vector<int> &nums) {
+        // write your code here
+        if(nums.size() == 0) return 0;
+        int n =  nums.size();
+        vector<int> left(n, 0);
+        vector<int> right(n, 0);
+        
+        int prefixSum = 0;
+        int minSum = 0;
+        int maxSum = INT_MIN;
+        for(int i = 0; i < n; ++i)
+        {
+            prefixSum += nums[i];
+            maxSum = max(maxSum, prefixSum - minSum);
+            minSum = min(minSum, prefixSum);
+            left[i] = maxSum;
+        }
+        
+        prefixSum = 0;
+        minSum = 0;
+        maxSum = INT_MIN;
+        for(int i  = n - 1; i >= 0; --i)
+        {
+            prefixSum += nums[i];
+            maxSum = max(maxSum, prefixSum - minSum);
+            minSum = min(minSum, prefixSum);
+            right[i] = maxSum;
+        }
+        
+        int res = INT_MIN;
+        for(int i = 0; i < n - 1; ++i)
+        {
+            res = max(res, left[i] + right[i + 1]);
+        }
+        return res;
+    }
+};
+
+Solution2:  Kadane's Algorithm
+class Solution {
+public:
+    /*
+     * @param nums: A list of integers
+     * @return: An integer denotes the sum of max two non-overlapping subarrays
+     */
+    int maxTwoSubArrays(vector<int> &nums) {
+        // write your code here
+        if(nums.size() == 0) return 0;
+        int n =  nums.size();
+        vector<int> left(n, 0);
+        vector<int> right(n, 0);
+        
+        int preMax = nums[0];
+        int maxSum = nums[0];
+        left[0] = nums[0];
+        for(int i = 1; i < n; ++i)
+        {
+            preMax = max(nums[i], nums[i] + preMax);
+            maxSum = max(maxSum, preMax);
+            left[i] = maxSum;
+        }
+        
+        preMax = nums[n-1];
+        maxSum = nums[n-1];
+        right[n-1] = nums[n-1];
+        for(int i  = n - 2; i >= 0; --i)
+        {
+            preMax = max(nums[i], nums[i] + preMax);
+            maxSum = max(maxSum, preMax);
+            right[i] = maxSum;
+        }
+        
+        int res = INT_MIN;
+        for(int i = 0; i < n - 1; ++i)
+        {
+            res = max(res, left[i] + right[i + 1]);
+        }
+        return res;
+    }
+};
