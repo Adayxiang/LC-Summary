@@ -1,0 +1,43 @@
+"
+Summary:
+TC:O()
+SC:O()
+Similar Problems:
+Follow-Up:
+Comments:
+"
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if(prices.size() <= 1) return 0;
+        int n = prices.size();
+        vector<int> left(n,0);
+        vector<int> right(n,0);
+        
+        int localMin = prices[0];
+        int globalMax = INT_MIN;
+        for(int i = 1; i < n; ++i)
+        {
+            globalMax = max(globalMax, max(0, prices[i] - localMin));
+            localMin = min(localMin, prices[i]);
+            left[i] = globalMax;
+        }
+        
+        int localMax = prices[n-1];
+        globalMax = INT_MIN;
+        for(int i = n - 1; i >= 0; --i)
+        {
+            globalMax = max(globalMax, max(0, localMax - prices[i]));
+            localMax = max(localMax, prices[i]);
+            right[i] = globalMax;
+        }
+        int res = 0;
+        for(int i = 0; i < n - 1; ++i)
+        {
+            res = max(res, left[i] + right[i+1]);
+        }
+        res = max(res, left[n-1]);
+        return res;
+        
+    }
+};
