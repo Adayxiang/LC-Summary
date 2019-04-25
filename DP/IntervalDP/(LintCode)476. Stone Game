@@ -1,0 +1,43 @@
+"
+Summary:
+TC:O(n3)
+SC:O(n2)
+Similar Problems:
+Follow-Up:
+Comments:
+"
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @return: An integer
+     */
+    int stoneGame(vector<int> &A) {
+        // write your code here
+        if(A.size() == 0)
+            return 0;
+        int n = A.size();
+        vector<vector<int>> dp(n, vector<int>(n,0));
+        vector<int> sum(n+1, 0);
+        for(int i = 0; i < n; ++i)
+        {
+            sum[i+1] = sum[i] + A[i];
+        }
+        return helper(0,n-1,A,dp,sum);
+    }
+    
+    int helper(int start, int end, vector<int> &A, vector<vector<int>> &dp, vector<int> &sum)
+    {
+        if(start >= end) return 0;
+        if(start + 1 == end) return A[start] + A[end];
+        if(dp[start][end] != 0) return dp[start][end];
+        int minNumber = INT_MAX;
+        for(int i = start; i < end; ++i)
+        {
+            int cost = helper(start, i, A, dp, sum) + helper(i+1, end, A, dp, sum) + sum[end+1] - sum[start];
+            minNumber = min(minNumber, cost);
+        }
+        dp[start][end] = minNumber;
+        return minNumber;
+    }
+};
