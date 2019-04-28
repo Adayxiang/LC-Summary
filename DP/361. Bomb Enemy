@@ -1,0 +1,67 @@
+"
+Summary:
+TC:O()
+SC:O()
+Similar Problems:
+Follow-Up:
+Comments:
+"
+
+class Solution {
+public:
+    int maxKilledEnemies(vector<vector<char>>& grid) {
+        int m =grid.size();
+        if(m ==0) return 0;
+            
+        int n = grid[0].size();
+        
+        vector<vector<int>> left(m, vector<int>(n,0));
+        vector<vector<int>> right(m, vector<int>(n,0));
+        vector<vector<int>> top(m, vector<int>(n,0));
+        vector<vector<int>> bot(m, vector<int>(n,0));
+ 
+    
+ 
+      for (int i =1; i<m;i++)
+            for (int j =0;j < n; j++){
+                top[i][j] = top[i - 1][j] + (grid[i - 1][j] == 'E');
+                if (grid[i - 1][j] == 'W')
+                    top[i][j] = 0;
+            }
+        
+        for (int i=0; i<m;i++) 
+            for (int j =1; j<n; j++) {
+                left[i][j] = left[i][j - 1] + (grid[i][j - 1] == 'E');
+                if (grid[i][j - 1] == 'W')
+                    left[i][j] = 0;
+            }
+            
+        
+        for(int i= m-2; i>=0; i--) 
+            for (int j =0;j <n; j++){
+                bot[i][j] = bot[i + 1][j] + (grid[i + 1][j] == 'E');
+                if (grid[i + 1][j] == 'W')
+                    bot[i][j] = 0;
+            }
+        
+        
+       for (int i=0; i<m;i++) 
+            for(int j= n-2; j>=0; j--) {
+                right[i][j] = right[i][j + 1] + (grid[i][j + 1] == 'E');
+                if( grid[i][j + 1] == 'W')
+                    right[i][j] = 0;
+            }
+        
+        int maxi= 0;
+       
+        for (int i=0; i<m;i++) 
+            for (int j=0; j<n;j++) {
+                if(grid[i][j] == '0'){
+                    maxi = max(maxi,left[i][j] + right[i][j] + top[i][j] + bot[i][j] );
+                    
+                }
+            }
+        
+        return maxi;
+    }
+};
