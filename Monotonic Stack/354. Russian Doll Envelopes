@@ -1,0 +1,87 @@
+354. Russian Doll Envelopes
+You have a number of envelopes with widths and heights given as a pair of integers (w, h). One envelope can fit into another if and only if both the width and height of one envelope is greater than the width and height of the other envelope.
+
+What is the maximum number of envelopes can you Russian doll? (put one inside other)
+
+Note:
+Rotation is not allowed.
+
+Example:
+
+Input: [[5,4],[6,4],[6,7],[2,3]]
+Output: 3 
+Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
+
+Solution1: dfs
+class Solution {
+public:
+    int maxEnvelopes(vector<vector<int>>& envelopes) {
+        if(envelopes.size() == 0) return 0;
+        int n = envelopes.size();
+        sort(envelopes.begin(), envelopes.end(), [](vector<int> &a, vector<int> &b)
+             {
+                 return a[0] > b[0] || (a[0] == b[0] && a[1] > b[1]);
+             });
+        int res = 0;
+        vector<int> visited(n, -1);
+        vector<int> pre{INT_MAX, INT_MAX};
+        return dfs(envelopes, 0, n, pre, visited);
+    }
+    
+    int dfs(vector<vector<int>>& envelopes, int start, int end, vector<int> &pre, vector<int> &visited)
+    {
+        if(start >= end) return 0;
+        if(visited[start] != -1) return visited[start];
+        int res = 0;
+        for(int i = start; i < end; ++i)
+        {
+            if(pre[0] > envelopes[i][0] && pre[1] > envelopes[i][1])
+            {
+                res = max(res, dfs(envelopes, i + 1, end, envelopes[i], visited) + 1);
+            }
+        }
+        return visited[start] = res;
+    }
+};
+
+Solution2: sort + monotonic stack
+class Solution {
+public:
+    int maxEnvelopes(vector<vector<int>>& envelopes) {
+        vector<int> dp;
+        sort(envelopes.begin(), envelopes.end(), [](vector<int> &a, vector<int> &b){
+            if (a[0] == b[0]) return a[1] > b[1];
+            return a[0] < b[0];
+        });
+        for (int i = 0; i < envelopes.size(); ++i) {
+            int left = 0, right = dp.size(), t= envelopes[i][1];
+            while (left < right) {
+                int mid = left + (right - left) / 2;
+                if (dp[mid] < t) left = mid + 1;
+                else right = mid;
+            }
+            if (right >= dp.size()) dp.push_back(t);
+            else dp[right] = t;
+        }
+        return dp.size();
+    }
+};
+
+Solution3: dp
+class Solution {
+public:
+    int maxEnvelopes(vector<vector<int>>& envelopes) {
+        int res = 0, n = envelopes.size();
+        vector<int> dp(n, 1);
+        sort(envelopes.begin(), envelopes.end());
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (envelopes[i][0] > envelopes[j][0] && envelopes[i][1] > envelopes[j][1]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+            res = max(res, dp[i]);
+        }
+        return res;
+    }
+};
