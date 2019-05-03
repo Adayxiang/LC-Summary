@@ -41,3 +41,47 @@ public:
         return matrix[left/n][left%n] == target;
     }
 };
+
+Template Method:
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int m = matrix.size();
+        if(m == 0) return false;
+        int n = matrix[0].size();
+        if(n == 0) return false;
+        int up = 0, bot = m;
+        if(matrix[0][0] > target || matrix.back().back() < target) return false;
+        while(up < bot)
+        {
+            int mid = up + (bot - up) / 2;
+            if(matrix[mid][0] == target)
+                return true;
+            else if(matrix[mid][0] > target)
+            {
+                bot = mid;
+            }
+            else
+            {
+                up = mid + 1;
+            }
+        }
+        up = bot - 1;
+        int fnt = 0, bck = n;
+        while(fnt < bck)
+        {
+            int mid = fnt + (bck - fnt) / 2;
+            if(matrix[up][mid] == target)
+                return true;
+            else if(matrix[up][mid] > target)
+            {
+                bck = mid;
+            }
+            else
+            {
+                fnt = mid + 1;
+            }
+        }
+        return false;
+    }
+};
