@@ -1,0 +1,26 @@
+单调栈例题
+有N个人， 顺次排列， 他们的身高分别为H[i]， 每个人向自己后方看， 他能看到的人
+是在他后面离他最近的且比他高的人。 请依次输出每个人能看到的人的编号
+Next[i]， 如果他后面不存在比他高的人， 则输出-1。
+想找 "从当前元素向某一方向的第一个 (大于 / 小于) 自己的元
+素"， 就要靠单调栈来维护单调性， 对应的是 (递减 / 递增)。
+
+
+public class Main {
+	public static int[] getHeight(int[] heights){
+		int n = heights.length;
+		int[] arr = new int[n];
+// Stack stores index of people
+		Stack<Integer> stack = new Stack<>();
+		for(int i = 0; i < n; i++){
+			while(!stack.isEmpty() && heights[stack.peek()] <= heights[i])
+			{
+				arr[stack.pop()] = i;
+			} 
+			stack.push(i);
+	} 
+	while(!stack.isEmpty())
+	{
+		arr[stack.pop()] = -1;
+	} return arr;
+}
