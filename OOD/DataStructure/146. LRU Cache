@@ -1,0 +1,157 @@
+146. LRU Cache
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+
+Follow up:
+Could you do both operations in O(1) time complexity?
+
+Example:
+
+LRUCache cache = new LRUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.put(4, 4);    // evicts key 1
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+
+Solution1:
+class LRUCache {
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+    }
+    
+    int get(int key) {
+        auto it = m.find(key);
+        if(it == m.end()) return -1;
+        l.splice(l.begin(), l, it->second);//list::splice实现list拼接的功能。将源list的内容部分或全部元素删除，拼插入到目的list。
+        return it->second->second;
+    }
+    
+    void put(int key, int value) {
+        auto it = m.find(key);
+        if (it != m.end()) l.erase(it->second);
+        l.push_front(make_pair(key, value));
+        m[key] = l.begin();
+        if (m.size() > cap) {
+            int k = l.rbegin()->first;
+            l.pop_back();
+            m.erase(k);
+        }
+    }
+    
+private:
+    int cap;
+    list<pair<int,int>> l;
+    unordered_map<int, list<pair<int,int>>::iterator> m;
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+ 
+ Solution2:
+ class LRUCache {
+public:
+    LRUCache(int capacity) {
+     _cap = capacity;
+     _used = 0;
+     head = nullptr;
+     tail = nullptr;
+     key_val_map.clear();
+    }
+
+    int get(int key) {
+     auto iter = key_val_map.find(key);
+     if (iter == key_val_map.end()) {
+      return -1;
+     }
+     auto cur_node = iter->second;
+      if (cur_node == head)
+        return head->val;
+      cur_node->prev->next = cur_node->next;
+      if (cur_node != tail)
+        cur_node->next->prev = cur_node->prev;
+      else
+        tail = cur_node->prev;
+
+      cur_node->next = head;
+      cur_node->prev = nullptr;
+
+      head->prev = cur_node;
+      head = cur_node;
+     return head->val;
+    }
+
+    void put(int key, int value) {
+     auto iter = key_val_map.find(key);
+     if (iter != key_val_map.end()) {
+      auto cur_node = iter->second;
+      cur_node->val = value;
+      if (cur_node == head)
+        return;
+      cur_node->prev->next = cur_node->next;
+      if (cur_node != tail)
+        cur_node->next->prev = cur_node->prev;
+      else
+        tail = cur_node->prev;
+
+      cur_node->next = head;
+      cur_node->prev = nullptr;
+
+      head->prev = cur_node;
+      head = cur_node;
+     } else if (_used < _cap) {
+      auto tmp = new node(key, value);
+      key_val_map[key] = tmp;
+      if (head == nullptr) {
+       head = tmp;
+       tail = tmp;
+      } else {
+       head->prev = tmp;
+       tmp->next = head;
+       head = tmp;
+      }
+      _used++;
+     } else {
+      auto old_iter = key_val_map.find(tail->key);
+      key_val_map.erase(old_iter);
+      tail->key = key;
+      tail->val = value;
+       if (tail == head) {
+       key_val_map[key] = head;
+       return;
+      }
+      tail->prev->next = nullptr;
+      auto tmp = tail;
+      tail = tail->prev;
+      head->prev = tmp;
+      tmp->next = head;
+      tmp->prev = nullptr;
+      head = tmp;
+      key_val_map[key] = head;
+     }
+    }
+    struct node {
+        node(int k, int v) : key(k), val(v), next(nullptr), prev(nullptr) {}
+        int val;
+        int key;
+        node *next;
+        node *prev;
+    };
+    unordered_map<int, node*> key_val_map;
+    node* head;
+    node* tail;
+    int _used;
+    int _cap;
+};
