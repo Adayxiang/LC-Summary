@@ -19,24 +19,34 @@ Solution1:dp + index
 class Solution {
 public:
     vector<int> largestDivisibleSubset(vector<int>& nums) {
+        if(nums.size() == 0) return {};
+        int n = nums.size();
+        vector<int> dp(n, 1), parent(n, -1);
         sort(nums.begin(), nums.end());
-        vector<int> dp(nums.size(), 0), parent(nums.size(), 0), res;
-        int mx = 0, mx_idx = 0;
-        for (int i = nums.size() - 1; i >= 0; --i) {
-            for (int j = i; j < nums.size(); ++j) {
-                if (nums[j] % nums[i] == 0 && dp[i] < dp[j] + 1) {
+        int maxLen = 1;
+        int index = 0;
+        for(int i = 0; i < n; ++i)
+        {
+            for(int j = 0; j < i; ++j)
+            {
+                if(nums[i] % nums[j] == 0 && dp[i] < dp[j] + 1)
+                {
                     dp[i] = dp[j] + 1;
                     parent[i] = j;
-                    if (mx < dp[i]) {
-                        mx = dp[i];
-                        mx_idx = i;
-                    }
+                }
+                if(dp[i] > maxLen)
+                {
+                    index = i;
+                    maxLen = dp[i];
                 }
             }
         }
-        for (int i = 0; i < mx; ++i) {
-            res.push_back(nums[mx_idx]);
-            mx_idx = parent[mx_idx];
+        
+        vector<int> res;
+        while(index != -1)
+        {
+            res.push_back(nums[index]);
+            index = parent[index];
         }
         return res;
     }
