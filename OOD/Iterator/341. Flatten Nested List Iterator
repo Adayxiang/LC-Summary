@@ -1,0 +1,115 @@
+341. Flatten Nested List Iterator
+Given a nested list of integers, implement an iterator to flatten it.
+
+Each element is either an integer, or a list -- whose elements may also be integers or other lists.
+
+Example 1:
+
+Input: [[1,1],2,[1,1]]
+Output: [1,1,2,1,1]
+Explanation: By calling next repeatedly until hasNext returns false, 
+             the order of elements returned by next should be: [1,1,2,1,1].
+Example 2:
+
+Input: [1,[4,[6]]]
+Output: [1,4,6]
+Explanation: By calling next repeatedly until hasNext returns false, 
+             the order of elements returned by next should be: [1,4,6].
+             
+
+Solution1: stack
+class NestedIterator {
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for (int i = nestedList.size() - 1; i >= 0; --i) {
+            s.push(nestedList[i]);
+        }
+    }
+
+    int next() {
+        NestedInteger t = s.top(); s.pop();
+        return t.getInteger();
+    }
+
+    bool hasNext() {
+        while (!s.empty()) {
+            NestedInteger t = s.top(); 
+            if (t.isInteger()) return true;
+            s.pop();
+            for (int i = t.getList().size() - 1; i >= 0; --i) {
+                s.push(t.getList()[i]);
+            }
+        }
+        return false;
+    }
+
+private:
+    stack<NestedInteger> s;
+};
+
+Solution2: deque
+class NestedIterator {
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for (auto a : nestedList) {
+            d.push_back(a);
+        }
+    }
+
+    int next() {
+        NestedInteger t = d.front(); d.pop_front();
+        return t.getInteger();
+    }
+
+    bool hasNext() {
+        while (!d.empty()) {
+            NestedInteger t = d.front();
+            if (t.isInteger()) return true;
+            d.pop_front();
+            for (int i = 0; i < t.getList().size(); ++i) {
+                d.insert(d.begin() + i, t.getList()[i]);
+            }
+        }
+        return false;
+    }
+
+private:
+    deque<NestedInteger> d;
+};
+
+Solution3: vector
+class NestedIterator {
+public:
+    vector<int> v;
+    int idx;
+    void add_vec(vector<NestedInteger> &nestedList)
+    {
+        int i;
+        for(i = 0; i< nestedList.size();i++){
+            if(nestedList[i].isInteger()){
+                v.push_back(nestedList[i].getInteger());
+            }
+            else 
+                add_vec(nestedList[i].getList());
+        }
+    }
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        int i,n;
+        n = nestedList.size();
+        if(!n)
+            return;
+        idx = 0;
+        add_vec(nestedList);
+        
+    }
+
+    int next() {
+        return v[idx++];
+    }
+
+    bool hasNext() {
+        if(idx >= v.size())
+            return false;
+        return true;
+    }
+};
