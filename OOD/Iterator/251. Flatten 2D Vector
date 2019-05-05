@@ -1,0 +1,68 @@
+251. Flatten 2D Vector
+Design and implement an iterator to flatten a 2d vector. It should support the following operations: next and hasNext.
+
+ 
+
+Example:
+
+Vector2D iterator = new Vector2D([[1,2],[3],[4]]);
+
+iterator.next(); // return 1
+iterator.next(); // return 2
+iterator.next(); // return 3
+iterator.hasNext(); // return true
+iterator.hasNext(); // return true
+iterator.next(); // return 4
+iterator.hasNext(); // return false
+ 
+
+Notes:
+
+Please remember to RESET your class variables declared in Vector2D, as static/class variables are persisted across multiple test cases. Please see here for more details.
+You may assume that next() call will always be valid, that is, there will be at least a next element in the 2d vector when next() is called.
+ 
+
+Follow up:
+
+As an added challenge, try to code it using only iterators in C++ or iterators in Java.
+
+
+Solution1: 1D-Matrix
+class Vector2D {
+public:
+    Vector2D(vector<vector<int>>& vec2d) {
+        for (auto a : vec2d) {
+            v.insert(v.end(), a.begin(), a.end());
+        }    
+    }
+    int next() {
+        return v[i++];
+    }
+    bool hasNext() {
+        return i < v.size();
+    }
+private:
+    vector<int> v;
+    int i = 0;
+};
+
+Solution2: 2D-matrix + x,y
+class Vector2D {
+public:
+    Vector2D(vector<vector<int>>& vec2d): data(vec2d), x(0), y(0) {}
+
+    int next() {
+        hasNext();
+        return data[x][y++];
+    }
+    bool hasNext() {
+        while (x < data.size() && y == data[x].size()) {
+            ++x; 
+            y = 0;
+        }
+        return x < data.size();
+    }    
+private:
+    vector<vector<int>> data;
+    int x, y;
+};
