@@ -19,3 +19,32 @@ Note:
 -100.0 < x < 100.0
 n is a 32-bit signed integer, within the range [−231, 231 − 1]
 
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if(x == 0) return 0;
+        else if(n == 0) return 1;
+        bool flag = n > 0;
+        long long tmpSize;
+        if(n == INT_MIN)
+            tmpSize = INT_MAX + 1;
+        else
+            tmpSize = abs(n);
+        //vector<double> visited(tmpSize+1, -1);
+        double res = helper(x,tmpSize);
+        return flag == 1 ? res : 1 / res;
+    }
+    
+    double helper(double x, long long n)
+    {
+        if(n == 0)
+            return 1;
+        if(n == 1)
+            return x;
+        //if(visited[n] != -1) return visited[n];
+        double tmp = helper(x, n / 2);
+        if(n % 2 == 0) return tmp * tmp;
+        else return tmp * tmp * x;
+    }
+};
+
