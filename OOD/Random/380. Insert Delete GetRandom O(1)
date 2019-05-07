@@ -73,3 +73,28 @@ public:
  * bool param_2 = obj->remove(val);
  * int param_3 = obj->getRandom();
  */
+ 
+ 
+ 之前写搜狗在线测试题目的时候，曾经想遍历一个set遍历。当时是这样写的。
+
+set<int>::iterator b = a.begin()+1
+
+后来发现程序报错。究其原因是，set迭代器不支持加减数操作。
+查看了一下维基百科，下面是有关说明。
+
+1.所有迭代器都应该实现自增算符：iter++,++iter
+
+2.Bidirectional迭代器：是在前向迭代器的基础上，多了单步向后遍历的能力。也就是--iter,iter--。
+
+3.Random Access迭代器：在双向迭代器基础上，具有直接访问各数据元素的能力。随机迭代器增加了“迭代器算术运算”：
+
+iter+=i 迭代器递增i位
+iter-=i 迭代器递减i位
+iter+i 加i位后的迭代器
+iter-i 减i位后的迭代器
+iter[i] 加i位后的迭代器的解引用
+iter<iter1 如果迭代器iter的位置在iter1前，返回true，否则返回false
+iter<=iter1 如果iter的位置在iter1的前面或同一位置时返回true，否则返回false
+iter>iter1 如果迭代器iter的位置在iter1后，返回true，否则返回false
+iter>=iter1 如果iter的位置在iter1的后面或同一位置时返回true，否则返回false
+4.在STL定义的容器中，string，vector与deque提供了随机访问迭代器，list、set、multiset、map、multimap提供了双向迭代器。
