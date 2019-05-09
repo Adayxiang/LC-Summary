@@ -1,0 +1,8 @@
+1. unordered_set<T> could not be combined with STD, just focus on basic data structure; Try to use set to remove duplicate;
+2. to_string() and stoi() could be used to transfer string and int. Watch out that the length of to_string() may not be 1.
+3. Comparator:
+struct OrderByAge
+{
+    bool operator() (Human const &a, Human const &b) { return a.age < b.age; }
+};
+typedef std::priority_queue<Human, std::vector<Human>, OrderByAge> age_queue;
