@@ -1,0 +1,45 @@
+90. Subsets II
+Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
+
+Example:
+
+Input: [1,2,2]
+Output:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> res;
+        if(nums.size() == 0) return res;
+        vector<int> tmp;
+        sort(nums.begin(), nums.end());
+        helper(nums, res, tmp, 0);
+        return res;
+    }
+    
+    void helper(vector<int>& nums, vector<vector<int>> &res, vector<int> &tmp, int index)
+    {
+        res.push_back(tmp);
+        if(index >= nums.size()) return;
+        for(int i = index; i < nums.size(); ++i)
+        {
+            tmp.push_back(nums[i]);
+            helper(nums, res, tmp, i + 1);
+            tmp.pop_back();
+            while(i + 1 < nums.size() && nums[i] == nums[i + 1])
+                i++;
+        }
+        
+        return;
+    }
+};
