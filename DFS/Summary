@@ -1,0 +1,4 @@
+dfs has two kinds of searching method:
+
+1. judge whether to continue at the beginning. If not, return.
+2. judge whether to continue at the body. If no, do not continue the dfs;
