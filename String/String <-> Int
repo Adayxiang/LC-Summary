@@ -1,0 +1,30 @@
+Way 3. Use std::stoi() function from C++ standard library since C++11.
+
+#include <iostream>
+#include <string>
+
+int main ()
+{
+  std::string str("123");
+
+  int n = std::stoi(str);
+
+  std::cout << str << " --> " << n << std::endl;
+
+  return 0;
+}
+
+
+Way 3. Use C++ standard library std::to_string() since C++11.
+
+#include <iostream>
+#include <string>
+
+int main ()
+{
+  int n = 123;
+  std::string str = std::to_string(n);
+  std::cout << n << " ==> " << str << std::endl;
+
+  return 0;
+}
