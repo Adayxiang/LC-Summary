@@ -1,0 +1,79 @@
+47. Permutations II
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Example:
+
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+
+
+Solution1: set to cut duplicate: Runtime 120ms
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        set<vector<int>> res;
+        if(nums.size() == 0) return vector<vector<int>>(res.begin(), res.end());
+        vector<int> tmp;
+        vector<int> visited(nums.size(), 0);
+        helper(nums, visited, tmp, res);
+        return vector<vector<int>>(res.begin(), res.end());
+    }
+    
+    void helper(vector<int> &nums, vector<int> &visited, vector<int> &tmp, set<vector<int>> &res)
+    {
+        if(tmp.size() == nums.size())
+        {
+            res.insert(tmp);
+            return;
+        }
+        for(int i = 0; i < nums.size(); ++i)
+        {
+            if(visited[i] == 1) continue;
+            tmp.push_back(nums[i]);
+            visited[i] = 1;
+            helper(nums, visited, tmp, res);
+            visited[i] = 0;
+            tmp.pop_back();
+        }
+        return;
+    }
+};
+
+Solution2: optimized search; Runtime: 40 ms, faster than 22.44% of C++ online submissions for Permutations II.
+class Solution {
+public:
+    void permute(vector<int>& nums, vector<bool> &visited, vector<int> &res, vector<vector<int>>& result) {
+        if (res.size() == nums.size()) {
+            result.push_back(res);
+            return;
+        }
+        for (int i = 0; i < nums.size(); ++i) {
+            if (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]) {
+                continue;
+            }
+            if (!visited[i]) {
+                visited[i] = true;
+                res.push_back(nums[i]);
+                permute(nums, visited, res, result);
+                visited[i] = false;
+                res.pop_back();
+            }
+        }
+    }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> result;
+        if (nums.empty()) {
+            return result;
+        }
+        sort(nums.begin(), nums.end());
+        vector<int> res;
+        vector<bool> visited(nums.size(), false);
+        permute(nums, visited, res, result);
+        return result;
+    }
+};
