@@ -6,3 +6,13 @@ struct OrderByAge
     bool operator() (Human const &a, Human const &b) { return a.age < b.age; }
 };
 typedef std::priority_queue<Human, std::vector<Human>, OrderByAge> age_queue;
+
+
+
+4.迭代器:
+只有顺序容器和关联容器支持迭代器遍历，各容器支持的迭代器的类别如下：
+容器                 支持的迭代器类别            容器               支持的迭代器类别            容器                 支持的迭代器类别
+vector              随机访问                      deque              随机访问                       list                   双向
+set                   双向                            multiset            双向                           map                 双向
+multimap          双向                             stack                不支持                        queue              不支持
+priority_queue   不支持
