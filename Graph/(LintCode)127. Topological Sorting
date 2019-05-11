@@ -1,0 +1,132 @@
+127. Topological Sorting
+
+Description
+中文
+English
+Given an directed graph, a topological order of the graph nodes is defined as follow:
+
+For each directed edge A -> B in graph, A must before B in the order list.
+The first node in the order can be any node in the graph with no nodes direct to it.
+Find any topological order for the given graph.
+
+You can assume that there is at least one topological order in the graph.
+
+Have you met this question in a real interview?  
+Clarification
+Learn more about representation of graphs
+
+Example
+For graph as follow:
+
+picture
+
+The topological order can be:
+
+[0, 1, 2, 3, 4, 5]
+[0, 2, 3, 1, 5, 4]
+...
+Challenge
+Can you do it in both BFS and DFS?
+
+Solutiion1: DFS
+/**
+ * Definition for Directed graph.
+ * struct DirectedGraphNode {
+ *     int label;
+ *     vector<DirectedGraphNode *> neighbors;
+ *     DirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+#include <list>
+
+class Solution {
+public:
+    /*
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */
+    vector<DirectedGraphNode*> topSort(vector<DirectedGraphNode*>& graph) {
+        // write your code here
+        list<DirectedGraphNode *> l;
+        unordered_set<DirectedGraphNode *> visited;
+        for(auto &root : graph)
+        {
+            dfs(l, root, visited);
+        }
+        return vector<DirectedGraphNode*>(l.begin(), l.end());
+    }
+    
+    void dfs(list<DirectedGraphNode *> &l, DirectedGraphNode *& root, unordered_set<DirectedGraphNode *> &visited)
+    {
+        if(visited.find(root) != visited.end()) return;
+        for(auto &next : root->neighbors)
+        {
+            dfs(l, next, visited);
+        }
+        l.push_front(root);
+        visited.insert(root);
+    }
+};
+
+Solution2: BFS
+/**
+ * Definition for Directed graph.
+ * struct DirectedGraphNode {
+ *     int label;
+ *     vector<DirectedGraphNode *> neighbors;
+ *     DirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+
+class Solution {
+public:
+    /*
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */
+    vector<DirectedGraphNode*> topSort(vector<DirectedGraphNode*>& graph) {
+        // write your code here
+        unordered_map<DirectedGraphNode *, int> m;
+        vector<DirectedGraphNode*> res;
+        for(auto &node : graph)
+        {
+            for(auto &neighbor : node->neighbors)
+            {
+                if(m.find(neighbor) == m.end())
+                {
+                    m[neighbor] = 1;
+                }
+                else
+                {
+                    ++m[neighbor];
+                }
+            }
+        }
+        
+        queue<DirectedGraphNode *> q;
+        for(auto &iter : graph)
+        {
+            if(m.find(iter)  == m.end())
+            {
+                res.push_back(iter);
+                q.push(iter);
+            }
+        }
+        
+        while(!q.empty())
+        {
+            DirectedGraphNode *tmp = q.front();q.pop();
+            for(auto &ne : tmp->neighbors)
+            {
+                m[ne]--;
+                if(m[ne] == 0)
+                {
+                    q.push(ne);
+                    res.push_back(ne);
+                }
+            }
+        }
+        
+        return res;
+    }
+};
