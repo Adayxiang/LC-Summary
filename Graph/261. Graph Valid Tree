@@ -11,6 +11,7 @@ Input: n = 5, and edges = [[0,1], [1,2], [2,3], [1,3], [1,4]]
 Output: false
 Note: you can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0,1] is the same as [1,0] and thus will not appear together in edges.
 
+Solution1: bfs
 class Solution {
 public:
     bool validTree(int n, vector<vector<int>>& edges) {
@@ -47,5 +48,9 @@ public:
         return count == n;
     }
 };
+
+Solution2: dfs
+
+        
 
 Reference:https://leetcode.com/problems/graph-valid-tree/discuss/69038/share-my-25-line-dfs-20-line-bfs-and-clean-union-find-java-solutions
