@@ -1,0 +1,83 @@
+76. Minimum Window Substring
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+Example:
+
+Input: S = "ADOBECODEBANC", T = "ABC"
+Output: "BANC"
+Note:
+
+If there is no such window in S that covers all characters in T, return the empty string "".
+If there is such window, you are guaranteed that there will always be only one unique minimum window in S.
+
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int resIndex = 0, resLength = INT_MAX;
+        int m = s.size(), n = t.size();
+        if(m < n || m == 0 || n == 0) return "";
+        unordered_map<char,int> store;
+        unordered_set<char> unSet;
+        for(auto &a : t)
+        {
+            store[a]++;
+            unSet.insert(a);
+        }
+        int left = 0, right = 0;
+        
+        while(right < m)
+        {
+            while(unSet.empty())
+            {
+                if(right - left < resLength)
+                {
+                    resIndex = left;
+                    resLength = right - left;
+                }
+                
+                if(store.find(s[left]) != store.end())
+                {
+                    store[s[left]]++;
+                    if(store[s[left]] > 0)
+                    {
+                        unSet.insert(s[left]);
+                    }
+                }
+                ++left;
+            }
+            
+            if(store.find(s[right]) != store.end())
+            {
+                store[s[right]]--;
+                if(store[s[right]] == 0)
+                {
+                    unSet.erase(s[right]);
+                }
+            }
+            ++right;
+        }
+        
+        while(unSet.empty())
+        {
+            if(right - left < resLength)
+            {
+                resIndex = left;
+                resLength = right - left;
+            }
+
+            if(store.find(s[left]) != store.end())
+            {
+                store[s[left]]++;
+                if(store[s[left]] > 0)
+                {
+                    unSet.insert(s[left]);
+                }
+            }
+            ++left;
+        }
+        
+        if(resLength == INT_MAX) return "";
+        return s.substr(resIndex, resLength);
+    }
+};
