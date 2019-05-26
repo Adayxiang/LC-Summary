@@ -1,0 +1,45 @@
+320. Generalized Abbreviation
+Write a function to generate the generalized abbreviations of a word. 
+
+Note: The order of the output does not matter.
+
+Example:
+
+Input: "word"
+Output:
+["word", "1ord", "w1rd", "wo1d", "wor1", "2rd", "w2d", "wo2", "1o1d", "1or1", "w1r1", "1o2", "2r1", "3d", "w3", "4"]
+
+class Solution {
+public:
+    vector<string> generateAbbreviations(string word) {
+        int n = word.size();
+        if(n == 0) return {""};
+        vector<string> res;
+        string tmp;
+        dfs(word, res, tmp, 0);
+        return res;
+    }
+    
+    void dfs(string &word, vector<string> &res, string tmp, int index)
+    {
+        if(index >= word.size())
+        {
+            res.push_back(tmp);
+            return;
+        }
+        tmp.push_back(word[index]);
+        dfs(word, res, tmp, index + 1);
+        tmp.pop_back();
+        if(tmp.back() < '0' || tmp.back() > '9')
+        {
+            for(int i = 1; i <= word.size(); ++i)
+            {
+                if(i + index > word.size()) break;
+                string save = tmp;
+                tmp.append(to_string(i));
+                dfs(word, res, tmp, index + i);
+                tmp = save;
+            }
+        }
+    }
+};
