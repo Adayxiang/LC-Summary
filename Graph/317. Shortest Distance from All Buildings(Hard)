@@ -21,3 +21,73 @@ Explanation: Given three buildings at (0,0), (0,4), (2,2), and an obstacle at (0
              travel distance of 3+3+1=7 is minimal. So return 7.
 Note:
 There will be at least one building. If it is not possible to build such house according to the above rules, return -1.
+
+
+class Solution {
+public:
+    int shortestDistance(vector<vector<int>>& grid) {
+        if(grid.size() == 0 || grid[0].size() == 0)
+            return 0;
+        int rows = grid.size(), cols = grid[0].size();
+        vector<vector<int>> disMap(rows,vector<int>(cols, 0));
+        int minDis = INT_MAX;
+        int curMark = 0;
+        for(int i = 0; i < rows; ++i)
+        {
+            for(int j = 0; j < cols; ++j)
+            {
+                if(grid[i][j] == 1)
+                {
+                    bfs(grid, disMap, i, j, curMark);
+                    curMark--;
+                }
+            }
+        }
+        
+        for(int i = 0; i < rows; ++i)
+        {
+            for(int j = 0; j < cols; ++j)
+            {
+                if(grid[i][j] == curMark)
+                    minDis = min(minDis, disMap[i][j]);
+            }
+        }
+        
+        return minDis == INT_MAX ? -1 : minDis;
+    }
+    
+    void bfs(vector<vector<int>>& grid, vector<vector<int>> &disMap, int x, int y, int curMark)
+    {
+        int rows = grid.size(), cols = grid[0].size();
+        int distance = 1;
+        
+        queue<pair<int,int>> q;
+        q.push(make_pair(x,y));
+        
+        while(!q.empty())
+        {
+            int size = q.size();
+            for(int i = 0; i < size; ++i)
+            {
+                pair<int,int> cur = q.front();q.pop();
+                int curX = cur.first, curY = cur.second;
+                for(int j = 0; j < 4; ++j)
+                {
+                    int nextX = curX + xDirs[j];
+                    int nextY = curY + yDirs[j];
+                    if(nextX >= 0 && nextX < rows && nextY >= 0 && nextY < cols && grid[nextX][nextY] == curMark)
+                    {
+                        grid[nextX][nextY] = curMark - 1;
+                        disMap[nextX][nextY] += distance;
+                        q.push(make_pair(nextX, nextY));
+                    }
+                }
+            }
+            ++distance;
+        }
+    }
+    
+private:
+    vector<int> xDirs = {0,0,1,-1};
+    vector<int> yDirs = {-1,1,0,0};
+};
