@@ -1,0 +1,62 @@
+143. Sort Colors II
+Description
+中文
+English
+Given an array of n objects with k different colors (numbered from 1 to k), sort them so that objects of the same color are adjacent, with the colors in the order 1, 2, ... k.
+
+You are not suppose to use the library's sort function for this problem.
+k <= n
+Have you met this question in a real interview?  
+Example
+Example1
+
+Input: 
+[3,2,2,1,4] 
+4
+Output: 
+[1,2,2,3,4]
+Example2
+
+Input: 
+[2,1,1,2,2] 
+2
+Output: 
+[1,1,2,2,2]
+Challenge
+A rather straight forward solution is a two-pass algorithm using counting sort. That will cost O(k) extra memory. Can you do it without using extra memory?
+
+class Solution {
+public:
+    /**
+     * @param colors: A list of integer
+     * @param k: An integer
+     * @return: nothing
+     */
+    void sortColors2(vector<int> &colors, int k) {
+        // write your code here
+        int left = 0, right = colors.size() - 1;
+        int cur;
+        int lowColor = 1;
+        int highColor = k;
+        while(lowColor < highColor)
+        {
+            cur = left;
+            while(cur <= right)
+            {
+                if(colors[cur] == lowColor)
+                {
+                    swap(colors[cur++], colors[left++]);
+                }
+                else if(colors[cur] == highColor)
+                {
+                    swap(colors[cur], colors[right--]);
+                }
+                else
+                {
+                    ++cur;
+                }
+            }
+            lowColor++, highColor--;
+        }
+    }
+};
