@@ -1,0 +1,62 @@
+314. Binary Tree Vertical Order Traversal
+Medium
+
+565
+
+110
+
+Favorite
+
+Share
+Given a binary tree, return the vertical order traversal of its nodes' values. (ie, from top to bottom, column by column).
+
+If two nodes are in the same row and column, the order should be from left to right.
+
+Examples 1:
+
+Input: [3,9,20,null,null,15,7]
+
+   3
+  /\
+ /  \
+ 9  20
+    /\
+   /  \
+  15   7 
+
+Output:
+
+[
+  [9],
+  [3,15],
+  [20],
+  [7]
+]
+
+class Solution {
+public:
+    vector<vector<int>> verticalOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        map<int, vector<int>> graph;
+        if(!root) return res;
+        queue<pair<TreeNode *, int>> q;
+        q.push(make_pair(root,0));
+        while(!q.empty())
+        {
+            int n = q.size();
+            for(int i = 0; i < n; ++i)
+            {
+                pair<TreeNode *, int> cur = q.front();q.pop();
+                graph[cur.second].push_back(cur.first->val);
+                if(cur.first->left) q.push(make_pair(cur.first->left,cur.second - 1));
+                if(cur.first->right) q.push(make_pair(cur.first->right,cur.second + 1));
+            }
+        }
+        
+        for(auto &a : graph)
+        {
+            res.push_back(a.second);
+        }
+        return res;
+    }
+};
