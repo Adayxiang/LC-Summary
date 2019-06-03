@@ -1,0 +1,86 @@
+250. Count Univalue Subtrees
+Medium
+
+283
+
+60
+
+Favorite
+
+Share
+Given a binary tree, count the number of uni-value subtrees.
+
+A Uni-value subtree means all nodes of the subtree have the same value.
+
+Example :
+
+Input:  root = [5,1,5,5,5,null,5]
+
+              5
+             / \
+            1   5
+           / \   \
+          5   5   5
+
+Output: 4
+
+class Solution {
+private:
+    int res = 0;
+    
+public:
+    int countUnivalSubtrees(TreeNode* root) {
+        helper(root);
+        return res;
+    }
+    
+    int helper(TreeNode *root)
+    {
+        if(!root) return 0;
+        int left = helper(root->left);
+        int right = helper(root->right);
+        if(left == -1 || right == -1) return -1;
+        if(root->left&&root->right)
+        {
+            if(root->val == root->left->val && root->val == root->right->val)
+            {
+                ++res;
+                return left + right + 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if(root->right && !root->left)
+        {
+            if(root->val == root->right->val)
+            {
+                ++res;
+                return right + 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if(!root->right && root->left)
+        {
+            if(root->val == root->left->val)
+            {
+                ++res;
+                return left + 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else
+        {
+            ++res;
+            return 1;
+        }
+    }
+};
+
