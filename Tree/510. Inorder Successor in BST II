@@ -1,0 +1,40 @@
+510. Inorder Successor in BST II
+Medium
+
+53
+
+12
+
+Favorite
+
+Share
+Given a binary search tree and a node in it, find the in-order successor of that node in the BST.
+
+The successor of a node p is the node with the smallest key greater than p.val.
+
+You will have direct access to the node but not to the root of the tree. Each node will have a reference to its parent node.
+
+class Solution {
+public:
+    Node* inorderSuccessor(Node* node) {
+        if(!node) return node;
+        Node* res = NULL;
+        if(node->right)
+        {
+            node = node->right;
+            while(node && node->left)
+            {
+                node = node->left;
+            }
+            return node;
+        }
+        else
+        {
+            while(node && node->parent && node->parent->right == node)
+            {
+                node = node->parent;
+            }
+            return node->parent;
+        }
+    }
+};
