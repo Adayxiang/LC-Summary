@@ -24,7 +24,8 @@ This repo is used to record my progress solving leetcode problems. This repo use
 
 #### [Binary_Index_Tree]
 
-#### [Design]
+#### [Design](https://github.com/Adayxiang/LC-Summary/tree/master/Design)
+[146.LRU-Cache](https://github.com/Adayxiang/LC-Summary/tree/master/Design/146.%20LRU%20Cache)
 
 #### [Stack]
 
