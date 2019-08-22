@@ -21,6 +21,7 @@ This repo is used to record my progress solving leetcode problems. This repo use
 #### [Tree]
 
 #### [Segment Tree]  
+[307.Range Sum Query - Mutable](https://github.com/Adayxiang/LC-Summary/tree/master/SegmentTree/307.Range%20Sum%20Query%20-%20Mutable)
 
 #### [Binary_Index_Tree]
 
